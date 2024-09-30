@@ -36,8 +36,8 @@ public class LanguageCodeConverter {
 
             for (String line : lines.subList(1, lines.size())) {
                 String[] language = line.split("\t");
-                languageCodes.put(language[0], language[1]);
-                languageCodes.put(language[1], language[0]);
+                languageCodes.put(language[0], language[1].toUpperCase());
+                languageCodes.put(language[1].toUpperCase(), language[0]);
             }
 
         }
@@ -53,7 +53,7 @@ public class LanguageCodeConverter {
      * @return the name of the language corresponding to the code
      */
     public String fromLanguageCode(String code) {
-        return languageCodes.get(code);
+        return languageCodes.get(code.toUpperCase());
     }
 
     /**

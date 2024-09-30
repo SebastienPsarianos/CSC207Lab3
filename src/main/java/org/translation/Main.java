@@ -89,14 +89,11 @@ public class Main {
         List<String> countryLanguages = new ArrayList<>();
 
         for (String language : translator.getCountryLanguages(countryCode)) {
-            System.out.println(language);
             String languageName = languageCodeConverter.fromLanguageCode(language);
             countryLanguages.add(languageName);
         }
 
-//        System.out.println(countryLanguages);
-
-        // Collections.sort(countryLanguages);
+        Collections.sort(countryLanguages);
 
         for (String language : countryLanguages) {
             System.out.println(language);

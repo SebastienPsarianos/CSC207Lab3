@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +46,7 @@ public class JSONTranslator implements Translator {
             // Loop through the countries
             for (Object obj : jsonArray) {
                 JSONObject country = (JSONObject) obj;
+                String countryCode = country.getString("alpha3").toUpperCase();
 
                 // Grab all the keys other than alpha2, id and alpha3
                 Set<String> keys = getLanguageKeys(country);
@@ -51,9 +56,7 @@ public class JSONTranslator implements Translator {
                     // Each country name translation is stored as <LanguageCode, Translation>
                     countryData.put(key.toUpperCase(), country.getString(key));
                 }
-
-                // Store each country accessible by its alpha3 code
-                translationData.put(country.getString(alpha3).toUpperCase(), countryData);
+                translationData.put(countryCode, countryData);
             }
         }
         catch (IOException | URISyntaxException ex) {
@@ -63,15 +66,7 @@ public class JSONTranslator implements Translator {
 
     @Override
     public List<String> getCountryLanguages(String countryCode) {
-        ArrayList<String> countryLanguages = new ArrayList<>();
-
-        for (String value : translationData.get(countryCode.toUpperCase()).values()) {
-            if (!"id".equals(value) && !alpha3.equals(value) && !"alpha2".equals(value)) {
-                countryLanguages.add(value);
-            }
-        }
-
-        return countryLanguages;
+        return new ArrayList<>(translationData.get(countryCode.toUpperCase()).keySet());
     }
 
     @Override
@@ -81,7 +76,6 @@ public class JSONTranslator implements Translator {
 
     @Override
     public String translate(String country, String language) {
-
         return translationData.get(country.toUpperCase()).get(language.toUpperCase());
     }
 
